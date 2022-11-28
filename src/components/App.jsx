@@ -14,6 +14,12 @@ export class App extends Component {
     error: '',
   };
 
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
   onSearch = valueSearch => {
     this.setState({ searchQuery: valueSearch });
 
@@ -34,7 +40,6 @@ export class App extends Component {
 
   render() {
     const { dataRequest } = this.state;
-    console.log(dataRequest);
 
     return (
       <div>

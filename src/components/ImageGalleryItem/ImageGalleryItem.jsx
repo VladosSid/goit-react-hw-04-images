@@ -1,21 +1,61 @@
 import PropTypes from 'prop-types';
+import { Component } from 'react';
+
+import Modal from '../Modal';
 
 import {
   ImageGalleryItemLi,
   ImageGalleryItemImage,
 } from './ImageGalleryItem.styled';
+import { BtnCloseModal } from '../../globalStyle/btnCloseModal.styled';
 
-const ImageGalleryItem = ({ dataApi }) => {
-  return (
-    <>
-      {dataApi.map(({ webformatURL, id }) => (
-        <ImageGalleryItemLi key={id}>
-          <ImageGalleryItemImage src={webformatURL} />
-        </ImageGalleryItemLi>
-      ))}
-    </>
-  );
-};
+export class ImageGalleryItem extends Component {
+  state = {
+    showModal: false,
+    urlEl: '',
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  elementSearch = id => {
+    const { dataApi } = this.props;
+
+    dataApi.map(el => {
+      if (el.id === id) {
+        this.setState(({ urlEl }) => ({
+          urlEl: el.largeImageURL,
+        }));
+
+        return this.toggleModal();
+      }
+    });
+  };
+
+  render() {
+    const { showModal, urlEl } = this.state;
+    const { dataApi } = this.props;
+    return (
+      <>
+        {dataApi.map(({ webformatURL, id }) => (
+          <ImageGalleryItemLi key={id} onClick={() => this.elementSearch(id)}>
+            <ImageGalleryItemImage src={webformatURL} />
+          </ImageGalleryItemLi>
+        ))}
+
+        {showModal && (
+          <Modal>
+            <BtnCloseModal onClick={this.toggleModal}></BtnCloseModal>
+            <img src={urlEl} alt="" />
+          </Modal>
+        )}
+      </>
+    );
+  }
+}
 
 export default ImageGalleryItem;
 
