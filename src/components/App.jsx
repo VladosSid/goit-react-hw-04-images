@@ -16,18 +16,21 @@ export class App extends Component {
   onSearch = valueSearch => {
     this.setState({ searchQuery: valueSearch });
 
+    console.log('до запроса');
     this.requestApi();
+    console.log('после запроса');
   };
 
   requestApi = async () => {
+    console.log('1');
     try {
       const { searchQuery, dataRequest } = this.state;
+      console.log(searchQuery);
 
       const request = await api.fetchImagesWithQuery(searchQuery);
-      // console.log(dataRequest.hits);
+      console.log(request);
 
       this.setState({ dataRequest: [...request.hits, ...dataRequest] });
-      // console.log(this.state);
     } catch (error) {
       this.setState({ error });
     }
@@ -35,6 +38,8 @@ export class App extends Component {
 
   render() {
     const { dataRequest } = this.state;
+    console.log(dataRequest);
+
     return (
       <div>
         <Global
