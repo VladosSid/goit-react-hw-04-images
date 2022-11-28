@@ -5,13 +5,15 @@ import {
   ImageGalleryItemImage,
 } from './ImageGalleryItem.styled';
 
-const ImageGalleryItem = dataApi => {
-  console.log(dataApi);
-
+const ImageGalleryItem = ({ dataApi }) => {
   return (
-    <ImageGalleryItemLi>
-      <ImageGalleryItemImage src="" alt="" />
-    </ImageGalleryItemLi>
+    <>
+      {dataApi.map(({ webformatURL, id }) => (
+        <ImageGalleryItemLi key={id}>
+          <ImageGalleryItemImage src={webformatURL} />
+        </ImageGalleryItemLi>
+      ))}
+    </>
   );
 };
 

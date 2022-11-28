@@ -5,6 +5,7 @@ import api from '../helpers/api';
 import { Global, css } from '@emotion/react';
 import { Searchbar } from './Searchbar';
 import ImageGallery from './ImageGallery';
+import ButtonLoadMore from './Button';
 
 export class App extends Component {
   state = {
@@ -16,19 +17,14 @@ export class App extends Component {
   onSearch = valueSearch => {
     this.setState({ searchQuery: valueSearch });
 
-    console.log('до запроса');
-    this.requestApi();
-    console.log('после запроса');
+    this.requestApi(valueSearch);
   };
 
-  requestApi = async () => {
-    console.log('1');
+  requestApi = async valueSearch => {
     try {
-      const { searchQuery, dataRequest } = this.state;
-      console.log(searchQuery);
+      let { dataRequest } = this.state;
 
-      const request = await api.fetchImagesWithQuery(searchQuery);
-      console.log(request);
+      const request = await api.fetchImagesWithQuery(valueSearch);
 
       this.setState({ dataRequest: [...request.hits, ...dataRequest] });
     } catch (error) {
@@ -75,6 +71,7 @@ export class App extends Component {
         />
         <Searchbar onSearch={this.onSearch} />
         <ImageGallery dataApi={dataRequest} />
+        {dataRequest.length !== 0 ? <ButtonLoadMore /> : null}
       </div>
     );
   }
