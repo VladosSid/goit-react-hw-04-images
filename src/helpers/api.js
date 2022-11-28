@@ -16,6 +16,4 @@ export const fetchImagesWithQuery = async (searchQuery, pageNumber = '1') => {
   }
 };
 
-export default {
-  fetchImagesWithQuery,
-};
+export default fetchImagesWithQuery;
