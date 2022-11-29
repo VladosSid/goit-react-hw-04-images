@@ -24,15 +24,16 @@ export class ImageGalleryItem extends Component {
   elementSearch = id => {
     const { dataApi } = this.props;
 
-    dataApi.map(el => {
-      if (el.id === id) {
+    for (let i = 0; i < dataApi.length; i++) {
+      console.log(dataApi[i]);
+      if (dataApi[i].id === id) {
         this.setState(({ urlEl }) => ({
-          urlEl: el.largeImageURL,
+          urlEl: dataApi[i].largeImageURL,
         }));
 
         return this.toggleModal();
       }
-    });
+    }
   };
 
   render() {
