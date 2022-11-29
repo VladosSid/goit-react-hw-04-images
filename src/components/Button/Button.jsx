@@ -1,11 +1,16 @@
+import { Component } from 'react';
+
 import { LoadMore, Footer } from './Button.styled';
 
-const ButtonLoadMore = () => {
-  return (
-    <Footer>
-      <LoadMore>Load more</LoadMore>
-    </Footer>
-  );
-};
+export class ButtonLoadMore extends Component {
+  render() {
+    const { loadMore } = this.props;
+    return (
+      <Footer>
+        <LoadMore onClick={loadMore}>Load more</LoadMore>
+      </Footer>
+    );
+  }
+}
 
 export default ButtonLoadMore;

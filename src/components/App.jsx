@@ -10,6 +10,7 @@ import ButtonLoadMore from './Button';
 export class App extends Component {
   state = {
     searchQuery: '',
+    pageNumber: 1,
     dataRequest: [],
     error: '',
     showModal: false,
@@ -23,17 +24,34 @@ export class App extends Component {
 
   onSearch = valueSearch => {
     this.setState({ searchQuery: valueSearch });
-
-    this.requestApi(valueSearch);
   };
 
-  requestApi = async valueSearch => {
+  increaseNumberPages = () => {
+    this.setState(prevState => ({
+      pageNumber: (prevState.pageNumber += 1),
+    }));
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const { searchQuery, pageNumber } = this.state;
+    if (prevState.searchQuery !== searchQuery) {
+      this.requestApi();
+    }
+
+    if (prevState.pageNumber !== pageNumber) {
+      this.requestApi();
+    }
+  }
+
+  requestApi = async () => {
+    const { pageNumber, searchQuery } = this.state;
+
     try {
       let { dataRequest } = this.state;
 
-      const request = await api.fetchImagesWithQuery(valueSearch);
+      const request = await api.fetchImagesWithQuery(searchQuery, pageNumber);
 
-      this.setState({ dataRequest: [...request.hits, ...dataRequest] });
+      this.setState({ dataRequest: [...dataRequest, ...request.hits] });
     } catch (error) {
       this.setState({ error });
     }
@@ -81,7 +99,9 @@ export class App extends Component {
           openModal={this.toggleModal}
           showModal={showModal}
         />
-        {dataRequest.length !== 0 ? <ButtonLoadMore /> : null}
+        {dataRequest.length > 11 ? (
+          <ButtonLoadMore loadMore={this.increaseNumberPages} />
+        ) : null}
       </div>
     );
   }
