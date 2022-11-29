@@ -6,11 +6,17 @@ import ImageGalleryItem from '../ImageGalleryItem';
 
 export class ImageGallery extends Component {
   render() {
-    const { dataApi } = this.props;
+    const { dataApi, openModal, showModal } = this.props;
     return (
       <>
         <ImageGalleryList>
-          {dataApi.length !== 0 ? <ImageGalleryItem dataApi={dataApi} /> : null}
+          {dataApi.length !== 0 ? (
+            <ImageGalleryItem
+              dataApi={dataApi}
+              openModal={openModal}
+              showModal={showModal}
+            />
+          ) : null}
         </ImageGalleryList>
       </>
     );

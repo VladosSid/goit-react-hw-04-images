@@ -11,34 +11,26 @@ import { BtnCloseModal } from '../../globalStyle/btnCloseModal.styled';
 
 export class ImageGalleryItem extends Component {
   state = {
-    showModal: false,
     urlEl: '',
   };
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
-  };
-
   elementSearch = id => {
-    const { dataApi } = this.props;
+    const { dataApi, openModal } = this.props;
 
     for (let i = 0; i < dataApi.length; i++) {
-      console.log(dataApi[i]);
       if (dataApi[i].id === id) {
         this.setState(({ urlEl }) => ({
           urlEl: dataApi[i].largeImageURL,
         }));
 
-        return this.toggleModal();
+        openModal();
       }
     }
   };
 
   render() {
-    const { showModal, urlEl } = this.state;
-    const { dataApi } = this.props;
+    const { urlEl } = this.state;
+    const { dataApi, showModal, openModal } = this.props;
     return (
       <>
         {dataApi.map(({ webformatURL, id }) => (
@@ -48,8 +40,8 @@ export class ImageGalleryItem extends Component {
         ))}
 
         {showModal && (
-          <Modal>
-            <BtnCloseModal onClick={this.toggleModal}></BtnCloseModal>
+          <Modal onClose={openModal}>
+            <BtnCloseModal onClick={openModal}></BtnCloseModal>
             <img src={urlEl} alt="" />
           </Modal>
         )}

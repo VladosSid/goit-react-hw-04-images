@@ -12,6 +12,7 @@ export class App extends Component {
     searchQuery: '',
     dataRequest: [],
     error: '',
+    showModal: false,
   };
 
   toggleModal = () => {
@@ -39,7 +40,7 @@ export class App extends Component {
   };
 
   render() {
-    const { dataRequest } = this.state;
+    const { dataRequest, showModal } = this.state;
 
     return (
       <div>
@@ -75,7 +76,11 @@ export class App extends Component {
           `}
         />
         <Searchbar onSearch={this.onSearch} />
-        <ImageGallery dataApi={dataRequest} />
+        <ImageGallery
+          dataApi={dataRequest}
+          openModal={this.toggleModal}
+          showModal={showModal}
+        />
         {dataRequest.length !== 0 ? <ButtonLoadMore /> : null}
       </div>
     );
