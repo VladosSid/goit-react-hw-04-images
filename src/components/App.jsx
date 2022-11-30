@@ -6,6 +6,7 @@ import { Global, css } from '@emotion/react';
 import { Searchbar } from './Searchbar';
 import ImageGallery from './ImageGallery';
 import ButtonLoadMore from './Button';
+import Loader from './Loader';
 
 export class App extends Component {
   state = {
@@ -13,13 +14,7 @@ export class App extends Component {
     pageNumber: 1,
     dataRequest: [],
     error: '',
-    showModal: false,
-  };
-
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
+    loader: false,
   };
 
   onSearch = valueSearch => {
@@ -36,6 +31,9 @@ export class App extends Component {
     const { searchQuery, pageNumber } = this.state;
     if (prevState.searchQuery !== searchQuery) {
       this.requestApi();
+
+      const { loader } = this.state;
+      this.setState({ loader: !loader });
     }
 
     if (prevState.pageNumber !== pageNumber) {
@@ -47,18 +45,23 @@ export class App extends Component {
     const { pageNumber, searchQuery } = this.state;
 
     try {
-      let { dataRequest } = this.state;
+      const { dataRequest } = this.state;
 
       const request = await api.fetchImagesWithQuery(searchQuery, pageNumber);
 
-      this.setState({ dataRequest: [...dataRequest, ...request.hits] });
+      this.setState({
+        dataRequest: [...dataRequest, ...request.hits],
+      });
     } catch (error) {
       this.setState({ error });
+    } finally {
+      const { loader } = this.state;
+      this.setState({ loader: !loader });
     }
   };
 
   render() {
-    const { dataRequest, showModal } = this.state;
+    const { dataRequest, loader } = this.state;
 
     return (
       <div>
@@ -93,12 +96,10 @@ export class App extends Component {
             }
           `}
         />
+        {loader && <Loader />}
+
         <Searchbar onSearch={this.onSearch} />
-        <ImageGallery
-          dataApi={dataRequest}
-          openModal={this.toggleModal}
-          showModal={showModal}
-        />
+        <ImageGallery dataApi={dataRequest} />
         {dataRequest.length > 11 ? (
           <ButtonLoadMore loadMore={this.increaseNumberPages} />
         ) : null}

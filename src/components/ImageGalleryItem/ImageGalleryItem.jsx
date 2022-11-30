@@ -12,36 +12,43 @@ import { BtnCloseModal } from '../../globalStyle/btnCloseModal.styled';
 export class ImageGalleryItem extends Component {
   state = {
     urlEl: '',
+    showModal: false,
   };
 
-  elementSearch = id => {
-    const { dataApi, openModal } = this.props;
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
 
-    for (let i = 0; i < dataApi.length; i++) {
-      if (dataApi[i].id === id) {
-        this.setState(({ urlEl }) => ({
-          urlEl: dataApi[i].largeImageURL,
-        }));
+  elementSearch = urlImg => {
+    this.setState({ urlEl: urlImg });
+  };
 
-        openModal();
-      }
+  componentDidUpdate(prevProps, prevState) {
+    const { urlEl } = this.state;
+    if (prevState.urlEl !== urlEl) {
+      this.toggleModal();
     }
-  };
+  }
 
   render() {
-    const { urlEl } = this.state;
-    const { dataApi, showModal, openModal } = this.props;
+    const { urlEl, showModal } = this.state;
+    const { dataApi } = this.props;
     return (
       <>
-        {dataApi.map(({ webformatURL, id }) => (
-          <ImageGalleryItemLi key={id} onClick={() => this.elementSearch(id)}>
+        {dataApi.map(({ webformatURL, id, largeImageURL }) => (
+          <ImageGalleryItemLi
+            key={id}
+            onClick={() => this.elementSearch(largeImageURL)}
+          >
             <ImageGalleryItemImage src={webformatURL} />
           </ImageGalleryItemLi>
         ))}
 
         {showModal && (
-          <Modal onClose={openModal}>
-            <BtnCloseModal onClick={openModal}></BtnCloseModal>
+          <Modal onClose={this.toggleModal}>
+            <BtnCloseModal onClick={this.toggleModal}></BtnCloseModal>
             <img src={urlEl} alt="" />
           </Modal>
         )}
