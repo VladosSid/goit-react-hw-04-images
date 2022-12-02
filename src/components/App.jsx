@@ -18,21 +18,28 @@ export class App extends Component {
   };
 
   onSearch = valueSearch => {
+    const { searchQuery } = this.state;
+    if (searchQuery !== valueSearch) {
+      this.setState({ dataRequest: [], pageNumber: 1 });
+    }
+
     this.setState({ searchQuery: valueSearch });
   };
 
   increaseNumberPages = () => {
     this.setState(prevState => ({
-      pageNumber: (prevState.pageNumber += 1),
+      pageNumber: prevState.pageNumber + 1,
+      loader: !prevState.loader,
     }));
   };
 
   componentDidUpdate(prevProps, prevState) {
+    const { loader } = this.state;
+
     const { searchQuery, pageNumber } = this.state;
     if (prevState.searchQuery !== searchQuery) {
       this.requestApi();
 
-      const { loader } = this.state;
       this.setState({ loader: !loader });
     }
 

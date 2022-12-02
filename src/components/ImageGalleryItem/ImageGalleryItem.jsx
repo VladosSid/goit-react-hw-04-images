@@ -47,7 +47,7 @@ export class ImageGalleryItem extends Component {
         ))}
 
         {showModal && (
-          <Modal onClose={this.toggleModal}>
+          <Modal onClose={this.toggleModal} dataUrl={this.state}>
             <BtnCloseModal onClick={this.toggleModal}></BtnCloseModal>
             <img src={urlEl} alt="" />
           </Modal>

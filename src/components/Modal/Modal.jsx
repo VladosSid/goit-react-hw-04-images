@@ -10,18 +10,24 @@ export class Modal extends Component {
   }
 
   componentWillUnmount() {
+    const { dataUrl } = this.props;
+    dataUrl.urlEl = '';
+
     window.removeEventListener('keydown', this.handleKeyDown);
   }
 
   handleKeyDown = e => {
+    const { onClose } = this.props;
     if (e.code === 'Escape') {
-      this.props.onClose();
+      onClose();
     }
   };
 
   handleBackdropClick = e => {
+    const { onClose } = this.props;
+
     if (e.target === e.currentTarget) {
-      this.props.onClose();
+      onClose();
     }
   };
 
