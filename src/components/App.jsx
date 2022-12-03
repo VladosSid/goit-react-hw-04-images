@@ -29,7 +29,6 @@ export class App extends Component {
   increaseNumberPages = () => {
     this.setState(prevState => ({
       pageNumber: prevState.pageNumber + 1,
-      loader: !prevState.loader,
     }));
   };
 
@@ -37,14 +36,12 @@ export class App extends Component {
     const { loader } = this.state;
 
     const { searchQuery, pageNumber } = this.state;
-    if (prevState.searchQuery !== searchQuery) {
+    if (
+      prevState.searchQuery !== searchQuery ||
+      prevState.pageNumber !== pageNumber
+    ) {
       this.requestApi();
-
       this.setState({ loader: !loader });
-    }
-
-    if (prevState.pageNumber !== pageNumber) {
-      this.requestApi();
     }
   }
 

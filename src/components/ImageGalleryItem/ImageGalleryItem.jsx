@@ -1,64 +1,25 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
-
-import Modal from '../Modal';
 
 import {
   ImageGalleryItemLi,
   ImageGalleryItemImage,
 } from './ImageGalleryItem.styled';
-import { BtnCloseModal } from '../../globalStyle/btnCloseModal.styled';
 
-export class ImageGalleryItem extends Component {
-  state = {
-    urlEl: '',
-    showModal: false,
-  };
-
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
-  };
-
-  elementSearch = urlImg => {
-    this.setState({ urlEl: urlImg });
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    const { urlEl } = this.state;
-    if (prevState.urlEl !== urlEl) {
-      this.toggleModal();
-    }
-  }
-
-  render() {
-    const { urlEl, showModal } = this.state;
-    const { dataApi } = this.props;
-    return (
-      <>
-        {dataApi.map(({ webformatURL, id, largeImageURL }) => (
-          <ImageGalleryItemLi
-            key={id}
-            onClick={() => this.elementSearch(largeImageURL)}
-          >
-            <ImageGalleryItemImage src={webformatURL} />
-          </ImageGalleryItemLi>
-        ))}
-
-        {showModal && (
-          <Modal onClose={this.toggleModal} dataUrl={this.state}>
-            <BtnCloseModal onClick={this.toggleModal}></BtnCloseModal>
-            <img src={urlEl} alt="" />
-          </Modal>
-        )}
-      </>
-    );
-  }
-}
+export const ImageGalleryItem = ({
+  webformatURL,
+  largeImageURL,
+  elementSearch,
+}) => {
+  return (
+    <ImageGalleryItemLi onClick={() => elementSearch(largeImageURL)}>
+      <ImageGalleryItemImage src={webformatURL} />
+    </ImageGalleryItemLi>
+  );
+};
 
 export default ImageGalleryItem;
 
 ImageGalleryItem.propTypes = {
-  dataApi: PropTypes.arrayOf(PropTypes.object),
+  webformatURL: PropTypes.string,
+  largeImageURL: PropTypes.string,
 };

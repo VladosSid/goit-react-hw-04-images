@@ -1,17 +1,59 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ImageGalleryList } from './ImageGallery.style';
+import Modal from '../Modal';
+import { BtnCloseModal } from '../../globalStyle/btnCloseModal.styled';
 
 import ImageGalleryItem from '../ImageGalleryItem';
 
 export class ImageGallery extends Component {
+  state = {
+    urlEl: '',
+    showModal: false,
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  elementSearch = urlImg => {
+    this.setState({ urlEl: urlImg });
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    const { urlEl } = this.state;
+    if (prevState.urlEl !== urlEl) {
+      this.toggleModal();
+    }
+  }
+
   render() {
+    const { urlEl, showModal } = this.state;
+
     const { dataApi } = this.props;
     return (
       <>
         <ImageGalleryList>
-          {dataApi.length !== 0 ? <ImageGalleryItem dataApi={dataApi} /> : null}
+          {dataApi.length !== 0
+            ? dataApi.map(({ webformatURL, id, largeImageURL }) => (
+                <ImageGalleryItem
+                  key={id}
+                  webformatURL={webformatURL}
+                  largeImageURL={largeImageURL}
+                  elementSearch={this.elementSearch}
+                />
+              ))
+            : null}
         </ImageGalleryList>
+
+        {showModal && (
+          <Modal onClose={this.toggleModal} dataUrl={this.state}>
+            <BtnCloseModal onClick={this.toggleModal}></BtnCloseModal>
+            <img src={urlEl} alt="" />
+          </Modal>
+        )}
       </>
     );
   }
