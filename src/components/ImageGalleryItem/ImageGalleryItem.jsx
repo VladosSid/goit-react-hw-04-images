@@ -11,9 +11,11 @@ export const ImageGalleryItem = ({
   elementSearch,
 }) => {
   return (
-    <ImageGalleryItemLi onClick={() => elementSearch(largeImageURL)}>
-      <ImageGalleryItemImage src={webformatURL} />
-    </ImageGalleryItemLi>
+    <>
+      <ImageGalleryItemLi onClick={() => elementSearch(largeImageURL)}>
+        <ImageGalleryItemImage src={webformatURL} />
+      </ImageGalleryItemLi>
+    </>
   );
 };
 

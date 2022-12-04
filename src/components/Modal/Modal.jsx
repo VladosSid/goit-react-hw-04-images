@@ -10,9 +10,6 @@ export class Modal extends Component {
   }
 
   componentWillUnmount() {
-    const { dataUrl } = this.props;
-    dataUrl.urlEl = '';
-
     window.removeEventListener('keydown', this.handleKeyDown);
   }
 

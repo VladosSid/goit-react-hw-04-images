@@ -20,14 +20,13 @@ export class ImageGallery extends Component {
 
   elementSearch = urlImg => {
     this.setState({ urlEl: urlImg });
+
+    this.toggleModal();
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    const { urlEl } = this.state;
-    if (prevState.urlEl !== urlEl) {
-      this.toggleModal();
-    }
-  }
+  resetUrl = () => {
+    this.setState({ urlEl: '' });
+  };
 
   render() {
     const { urlEl, showModal } = this.state;
@@ -43,13 +42,16 @@ export class ImageGallery extends Component {
                   webformatURL={webformatURL}
                   largeImageURL={largeImageURL}
                   elementSearch={this.elementSearch}
+                  showModal={showModal}
+                  toggleModal={this.toggleModal}
+                  urlEl={urlEl}
                 />
               ))
             : null}
         </ImageGalleryList>
 
         {showModal && (
-          <Modal onClose={this.toggleModal} dataUrl={this.state}>
+          <Modal onClose={this.toggleModal}>
             <BtnCloseModal onClick={this.toggleModal}></BtnCloseModal>
             <img src={urlEl} alt="" />
           </Modal>
