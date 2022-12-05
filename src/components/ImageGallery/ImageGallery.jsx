@@ -42,9 +42,6 @@ export class ImageGallery extends Component {
                   webformatURL={webformatURL}
                   largeImageURL={largeImageURL}
                   elementSearch={this.elementSearch}
-                  showModal={showModal}
-                  toggleModal={this.toggleModal}
-                  urlEl={urlEl}
                 />
               ))
             : null}

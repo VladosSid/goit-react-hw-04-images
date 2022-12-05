@@ -24,4 +24,5 @@ export default ImageGalleryItem;
 ImageGalleryItem.propTypes = {
   webformatURL: PropTypes.string,
   largeImageURL: PropTypes.string,
+  elementSearch: PropTypes.func,
 };
