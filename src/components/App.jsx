@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 import api from '../helpers/api';
 
@@ -15,8 +15,6 @@ export function App() {
   const [errorApi, setErrorApi] = useState('');
   const [loader, setLoader] = useState(false);
 
-  const notRequestFirstRender = useRef(true);
-
   const onSearch = valueSearch => {
     if (searchQuery !== valueSearch) {
       setDataRequest([]);
@@ -27,9 +25,9 @@ export function App() {
   };
 
   const requestApi = async () => {
-    setLoader(!loader);
-
     try {
+      console.log('Запуск лоадера');
+      setLoader(state => !state);
       const request = await api.fetchImagesWithQuery(searchQuery, pageNumber);
 
       setDataRequest([...dataRequest, ...request.hits]);
@@ -37,19 +35,16 @@ export function App() {
       setErrorApi(error.message);
       console.log(errorApi);
     } finally {
-      setLoader(!loader);
+      console.log('Остановка лоадера');
+      setLoader(state => !state);
     }
   };
 
   useEffect(() => {
-    if (notRequestFirstRender.current) {
-      notRequestFirstRender.current = false;
-      console.log('Отмена useEffect при первом рендере');
+    if (searchQuery === '') {
       return;
     }
-    console.log(
-      'useEffect при изменении searchQuery и последующим запросом на сервер'
-    );
+
     requestApi();
   }, [searchQuery, pageNumber]); // eslint-disable-line
 
@@ -91,7 +86,7 @@ export function App() {
       <Searchbar onSearch={onSearch} />
       <ImageGallery dataApi={dataRequest} />
       {dataRequest.length > 11 ? (
-        <ButtonLoadMore loadMore={setPageNumber(state => state + 1)} />
+        <ButtonLoadMore loadMore={() => setPageNumber(state => state + 1)} />
       ) : null}
     </div>
   );
