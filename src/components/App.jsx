@@ -51,7 +51,7 @@ export function App() {
       'useEffect при изменении searchQuery и последующим запросом на сервер'
     );
     requestApi();
-  }, [searchQuery, pageNumber]);
+  }, [searchQuery, pageNumber]); // eslint-disable-line
 
   return (
     <div>
