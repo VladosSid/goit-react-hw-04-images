@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 
 import {
   SearchbarBox,
@@ -7,44 +7,31 @@ import {
   SearchFormButtonLabel,
   SearchFormInput,
 } from './Searchbar.styled';
-export class Searchbar extends Component {
-  state = {
-    searchValue: '',
-  };
 
-  recordSearch = e => {
-    const { value } = e.target;
-    this.setState({ searchValue: value });
-  };
+export function Searchbar({ onSearch }) {
+  const [searchValue, setSearchValue] = useState('');
 
-  submitSearch = e => {
+  const submitSearch = e => {
     e.preventDefault();
-    this.props.onSearch(this.state.searchValue);
-    // this.reset();
+    onSearch(searchValue);
   };
 
-  reset = () => {
-    this.setState({ searchValue: '' });
-  };
+  return (
+    <SearchbarBox>
+      <SearchForm onSubmit={submitSearch}>
+        <SearchFormButton type="submit">
+          <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+        </SearchFormButton>
 
-  render() {
-    return (
-      <SearchbarBox>
-        <SearchForm onSubmit={this.submitSearch}>
-          <SearchFormButton type="submit">
-            <SearchFormButtonLabel>Search</SearchFormButtonLabel>
-          </SearchFormButton>
-
-          <SearchFormInput
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            value={this.state.searchValue}
-            onChange={this.recordSearch}
-          />
-        </SearchForm>
-      </SearchbarBox>
-    );
-  }
+        <SearchFormInput
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
+        />
+      </SearchForm>
+    </SearchbarBox>
+  );
 }
